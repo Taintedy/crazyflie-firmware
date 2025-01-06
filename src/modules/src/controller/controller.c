@@ -8,10 +8,11 @@
 #include "controller_indi.h"
 #include "controller_brescianini.h"
 #include "controller_lee.h"
+#include "controller_lqr.h"
 
 #include "autoconf.h"
 
-#define DEFAULT_CONTROLLER ControllerTypePID
+#define DEFAULT_CONTROLLER ControllerTypeLQR
 static ControllerType currentController = ControllerTypeAutoSelect;
 
 static void initController();
@@ -30,6 +31,7 @@ static ControllerFcns controllerFunctions[] = {
   {.init = controllerINDIInit, .test = controllerINDITest, .update = controllerINDI, .name = "INDI"},
   {.init = controllerBrescianiniInit, .test = controllerBrescianiniTest, .update = controllerBrescianini, .name = "Brescianini"},
   {.init = controllerLeeFirmwareInit, .test = controllerLeeFirmwareTest, .update = controllerLeeFirmware, .name = "Lee"},
+  {.init = controllerLQRInit, .test = controllerLQRTest, .update = controllerLQR, .name = "LQR"},
   #ifdef CONFIG_CONTROLLER_OOT
   {.init = controllerOutOfTreeInit, .test = controllerOutOfTreeTest, .update = controllerOutOfTree, .name = "OutOfTree"},
   #endif

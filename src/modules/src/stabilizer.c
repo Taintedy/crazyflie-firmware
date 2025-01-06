@@ -69,7 +69,7 @@ static control_t control;
 
 static motors_thrust_uncapped_t motorThrustUncapped;
 static motors_thrust_uncapped_t motorThrustBatCompUncapped;
-static motors_thrust_pwm_t motorPwm;
+// static motors_thrust_pwm_t motorPwm;
 
 // For scratch storage - never logged or passed to other subsystems.
 static setpoint_t tempSetpoint;
@@ -205,17 +205,17 @@ bool stabilizerTest(void)
   return pass;
 }
 
-static void batteryCompensation(const motors_thrust_uncapped_t* motorThrustUncapped, motors_thrust_uncapped_t* motorThrustBatCompUncapped)
-{
-  float supplyVoltage = pmGetBatteryVoltage();
+// static void batteryCompensation(const motors_thrust_uncapped_t* motorThrustUncapped, motors_thrust_uncapped_t* motorThrustBatCompUncapped)
+// {
+//   float supplyVoltage = pmGetBatteryVoltage();
 
-  for (int motor = 0; motor < STABILIZER_NR_OF_MOTORS; motor++)
-  {
-    motorThrustBatCompUncapped->list[motor] = motorsCompensateBatteryVoltage(motor, motorThrustUncapped->list[motor], supplyVoltage);
-  }
-}
+//   for (int motor = 0; motor < STABILIZER_NR_OF_MOTORS; motor++)
+//   {
+//     motorThrustBatCompUncapped->list[motor] = motorsCompensateBatteryVoltage(motor, motorThrustUncapped->list[motor], supplyVoltage);
+//   }
+// }
 
-static void setMotorRatios(const motors_thrust_pwm_t* motorPwm)
+static void setMotorRatios(const motors_thrust_uncapped_t* motorPwm)
 {
   motorsSetRatio(MOTOR_M1, motorPwm->motors.m1);
   motorsSetRatio(MOTOR_M2, motorPwm->motors.m2);
@@ -235,26 +235,26 @@ static void updateStateEstimatorAndControllerTypes() {
   }
 }
 
-static void logCapWarning(const bool isCapped) {
-  #ifdef CONFIG_LOG_MOTOR_CAP_WARNING
-  static uint32_t nextReportTick = 0;
+// static void logCapWarning(const bool isCapped) {
+//   #ifdef CONFIG_LOG_MOTOR_CAP_WARNING
+//   static uint32_t nextReportTick = 0;
 
-  if (isCapped) {
-    uint32_t now = xTaskGetTickCount();
-    if (now > nextReportTick) {
-      DEBUG_PRINT("Warning: motor thrust saturated\n");
-      nextReportTick = now + M2T(3000);
-    }
-  }
-  #endif
-}
+//   if (isCapped) {
+//     uint32_t now = xTaskGetTickCount();
+//     if (now > nextReportTick) {
+//       DEBUG_PRINT("Warning: motor thrust saturated\n");
+//       nextReportTick = now + M2T(3000);
+//     }
+//   }
+//   #endif
+// }
 
 static void controlMotors(const control_t* control) {
   powerDistribution(control, &motorThrustUncapped);
-  batteryCompensation(&motorThrustUncapped, &motorThrustBatCompUncapped);
-  const bool isCapped = powerDistributionCap(&motorThrustBatCompUncapped, &motorPwm);
-  logCapWarning(isCapped);
-  setMotorRatios(&motorPwm);
+  // batteryCompensation(&motorThrustUncapped, &motorThrustBatCompUncapped);
+  // const bool isCapped = powerDistributionCap(&motorThrustUncapped, &motorPwm);
+  // logCapWarning(isCapped);
+  setMotorRatios(&motorThrustUncapped);
 }
 
 void rateSupervisorTask(void *pvParameters) {
