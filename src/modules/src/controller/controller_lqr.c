@@ -223,15 +223,15 @@ LOG_ADD(LOG_FLOAT, m1, &(controlVect[0]))
 /**
  * @brief thrust on m2
  */
-LOG_ADD(LOG_FLOAT, m2, &(controlVect[2]))
+LOG_ADD(LOG_FLOAT, m2, &(controlVect[1]))
 /**
  * @brief thrust on m3
  */
-LOG_ADD(LOG_FLOAT, m3, &(controlVect[3]))
+LOG_ADD(LOG_FLOAT, m3, &(controlVect[2]))
 /**
  * @brief thrust on m4
  */
-LOG_ADD(LOG_FLOAT, m4, &(controlVect[4]))
+LOG_ADD(LOG_FLOAT, m4, &(controlVect[3]))
 
 LOG_GROUP_STOP(state_control)
 
