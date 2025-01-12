@@ -5,7 +5,7 @@
 
 
 
-void createRotationMatrix(double roll, double pitch, double yaw, double R[3][3]) {
+void createRotationMatrix(float roll, float pitch, float yaw, float (*R)[3][3]) {
     // Compute trigonometric values
     double cr = cos(roll);  // Cosine of roll
     double sr = sin(roll);  // Sine of roll
@@ -15,17 +15,17 @@ void createRotationMatrix(double roll, double pitch, double yaw, double R[3][3])
     double sy = sin(yaw);   // Sine of yaw
 
     // Compute the rotation matrix
-    R[0][0] = cy * cp;
-    R[0][1] = cy * sp * sr - sy * cr;
-    R[0][2] = cy * sp * cr + sy * sr;
+    (*R)[0][0] = cy * cp;
+    (*R)[0][1] = sy * cp;
+    (*R)[0][2] = -sp;
 
-    R[1][0] = sy * cp;
-    R[1][1] = sy * sp * sr + cy * cr;
-    R[1][2] = sy * sp * cr - cy * sr;
+    (*R)[1][0] = cy * sp * sr - sy * cr;
+    (*R)[1][1] = sy * sp * sr + cy * cr;
+    (*R)[1][2] = cp * sr;
 
-    R[2][0] = -sp;
-    R[2][1] = cp * sr;
-    R[2][2] = cp * cr;
+    (*R)[2][0] = cy * sp * cr + sy * sr;
+    (*R)[2][1] = sy * sp * cr - cy * sr;
+    (*R)[2][2] = cp * cr;
 }
 
 
@@ -97,6 +97,9 @@ void createRefVector(float (*refVect)[12][1], const setpoint_t *setpoint)
     (*refVect)[0][0] = setpoint->position.x;
     (*refVect)[1][0] = setpoint->position.y;
     (*refVect)[2][0] = setpoint->position.z;
+    struct quat setpoint_quat = mkquat(setpoint->attitudeQuaternion.x, setpoint->attitudeQuaternion.y, setpoint->attitudeQuaternion.z, setpoint->attitudeQuaternion.w);
+    struct vec rpy = quat2rpy(setpoint_quat);
+    (*refVect)[8][0] = rpy.z;
 
 }
 

@@ -7,7 +7,7 @@
 #define F_HOVER 0.0907425f
 #define F_MAX 0.15
 
-void createRotationMatrix(double roll, double pitch, double yaw, double R[3][3]);
+void createRotationMatrix(float roll, float pitch, float yaw, float (*R)[3][3]);
 void matrixMultiply(int rowsA, int colsA, int colsB,
                     const float (*A)[rowsA][colsA], const float (*B)[colsA][colsB], float (*C)[rowsA][colsB]);
 void subtractMatrices(int rows, int cols, const float (*A)[rows][cols], const float (*B)[rows][cols], float (*Result)[rows][cols]);
